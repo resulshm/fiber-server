@@ -11,6 +11,7 @@ type Repository struct {
 
 type Video interface {
 	AddVideo(video models.Video) (int, error)
+	GetVideoByID(id int) (models.Video, error)
 }
 
 func NewRepository(db *sqlx.DB) *Repository {

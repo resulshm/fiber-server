@@ -6,7 +6,8 @@ import (
 )
 
 const (
-	insertVideo = `INSERT INTO videos (title, description) VALUES ($1, $2) RETURNING id`
+	insertVideo  = `INSERT INTO videos (title, description) VALUES ($1, $2) RETURNING id`
+	getVideoByID = `Select * FROM videos WHERE id = $1`
 )
 
 type VideoPostgres struct {
@@ -24,4 +25,13 @@ func (r *VideoPostgres) AddVideo(video models.Video) (int, error) {
 		return 0, err
 	}
 	return id, nil
+}
+
+func (r *VideoPostgres) GetVideoByID(id int) (models.Video, error) {
+	var video models.Video
+	if err := r.db.Get(&video, getVideoByID, id); err != nil {
+		return video, err
+	}
+
+	return video, nil
 }

@@ -16,3 +16,7 @@ func NewVideoService(repo repository.Video) *VideoService {
 func (s *VideoService) AddVideo(video models.Video) (int, error) {
 	return s.repo.AddVideo(video)
 }
+
+func (s *VideoService) GetVideoByID(id int) (models.Video, error) {
+	return s.repo.GetVideoByID(id)
+}

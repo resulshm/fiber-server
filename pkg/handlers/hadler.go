@@ -17,6 +17,7 @@ func (h *Handler) InitRoutes() *fiber.App {
 	app := fiber.New()
 
 	app.Post("/video", h.addVideo)
+	app.Get("/video/:id", h.getVideoByID)
 
 	return app
 }
