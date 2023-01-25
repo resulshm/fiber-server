@@ -1,7 +1,7 @@
 package models
 
 type Video struct {
-	Id          int64  `json:"id"`
+	Id          int    `json:"id"`
 	Title       string `json:"title"`
 	Description string `json:"description"`
 	Likes       int64  `json:"likes"`

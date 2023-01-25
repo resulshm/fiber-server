@@ -1,12 +1,16 @@
 package repository
 
-import "github.com/jmoiron/sqlx"
+import (
+	"github.com/ResulShamuhammedov/fiber-server/pkg/models"
+	"github.com/jmoiron/sqlx"
+)
 
 type Repository struct {
 	Video
 }
 
 type Video interface {
+	AddVideo(video models.Video) (int, error)
 }
 
 func NewRepository(db *sqlx.DB) *Repository {
