@@ -1,7 +1,10 @@
 package repository
 
 import (
+	"bufio"
 	"fmt"
+	"os"
+	"path/filepath"
 
 	"github.com/jmoiron/sqlx"
 	_ "github.com/lib/pq"
@@ -29,4 +32,23 @@ func NewPostgresDB(cfg Config) (*sqlx.DB, error) {
 	}
 
 	return db, nil
+}
+
+func AddVidesToDatabase(db *sqlx.DB) error {
+	for i := 1; i < 5; i++ {
+		filename := fmt.Sprintf("mock_videos_%d.sql", i)
+		readFile, err := os.Open(filepath.Join("mockdata", filename))
+		if err != nil {
+			return err
+		}
+
+		fileScanner := bufio.NewScanner(readFile)
+		fileScanner.Split(bufio.ScanLines)
+		for fileScanner.Scan() {
+			if _, err = db.Exec(fileScanner.Text()); err != nil {
+				return err
+			}
+		}
+	}
+	return nil
 }
