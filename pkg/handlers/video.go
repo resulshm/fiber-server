@@ -39,6 +39,29 @@ func (h *Handler) getVideoByID(c *fiber.Ctx) error {
 		eMsg := fmt.Sprintf("Internal server error: %s", err.Error())
 		return newErrorResponse(c, 500, eMsg)
 	}
+	if video.Id == 0 {
+		eMsg := fmt.Sprintf("video with id=%d is not found", id)
+		return newErrorResponse(c, 404, eMsg)
+	}
+	return c.Status(200).JSON(video)
+}
+
+func (h *Handler) getVideoByTitle(c *fiber.Ctx) error {
+	var title string
+	if title = c.Query("title"); title == "" {
+		eMsg := "title must be given"
+		return newErrorResponse(c, 400, eMsg)
+	}
+
+	video, err := h.services.Video.GetVideoByTitle(title)
+	if err != nil {
+		eMsg := fmt.Sprintf("Internal server error: %s", err.Error())
+		return newErrorResponse(c, 500, eMsg)
+	}
+	if video.Id == 0 {
+		eMsg := fmt.Sprintf("video with title=%s is not found", title)
+		return newErrorResponse(c, 404, eMsg)
+	}
 
 	return c.Status(200).JSON(video)
 }

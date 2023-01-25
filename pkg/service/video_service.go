@@ -20,3 +20,7 @@ func (s *VideoService) AddVideo(video models.Video) (int, error) {
 func (s *VideoService) GetVideoByID(id int) (models.Video, error) {
 	return s.repo.GetVideoByID(id)
 }
+
+func (s *VideoService) GetVideoByTitle(title string) (models.Video, error) {
+	return s.repo.GetVideoByTitle(title)
+}

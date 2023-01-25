@@ -12,6 +12,7 @@ type Service struct {
 type Video interface {
 	AddVideo(video models.Video) (int, error)
 	GetVideoByID(id int) (models.Video, error)
+	GetVideoByTitle(title string) (models.Video, error)
 }
 
 func NewService(repo *repository.Repository) *Service {
