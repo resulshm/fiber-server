@@ -1,0 +1,28 @@
+version: '3.8'
+
+services:
+  web:
+    depends_on:
+      - db
+    build: .
+    env_file:
+      - .env
+    ports:
+      - "3000:3000"
+    volumes:
+      - .:/app
+  db:
+    restart: always
+    image: postgres:alpine
+    environment:
+      - POSTGRES_USER=${DB_USERNAME}
+      - POSTGRES_PASSWORD=${DB_PASSWORD}
+      - POSTGRES_DB=${DB_NAME}
+    ports:
+      - "5432:5432"
+    volumes:
+      - postgres-db:/var/lib/postgresql/data
+      - ./schema/db.sql:/docker-entrypoint-initdb.d/create_tables.sql
+
+volumes:
+  postgres-db:
