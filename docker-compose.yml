@@ -1,29 +1,23 @@
-version: '1.0'
+version: '3.8'
 
 services:
   web:
     depends_on:
       - db
     build: .
-    environment:
-      - DB_HOST=localhost
-      - DB_PORT=5432
-      - DB_USERNAME=postgres
-      - DB_NAME=videos
-      - SSLMode=disable
-      - DB_PASSWORD=123qwe
+    env_file:
+      - .env
     ports:
       - "3000:3000"
     volumes:
       - .:/app
   db:
-    image: postgres:alpine
     restart: always
-    hostname: localhost
+    image: postgres:alpine
     environment:
-      - POSTGRES_USER=postgres
-      - POSTGRES_PASSWORD=123qwe
-      - POSTGRES_DB=videos
+      - POSTGRES_USER=${DB_USERNAME}
+      - POSTGRES_PASSWORD=${DB_PASSWORD}
+      - POSTGRES_DB=${DB_NAME}
     ports:
       - "5432:5432"
     volumes:
@@ -32,4 +26,3 @@ services:
 
 volumes:
   postgres-db:
-      
