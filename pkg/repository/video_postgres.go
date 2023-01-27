@@ -34,7 +34,7 @@ func (r *VideoPostgres) AddVideo(ctx context.Context, video models.Video) (int, 
 func (r *VideoPostgres) GetVideoByID(ctx context.Context, id int) (models.Video, error) {
 	var video models.Video
 	row := r.db.QueryRow(ctx, getVideoByID, id)
-	if err := row.Scan(&video); err != nil {
+	if err := row.Scan(&video.Id, &video.Title, &video.Description, &video.Likes, &video.Dislikes, &video.Views); err != nil {
 		if err == sql.ErrNoRows {
 			return models.Video{}, nil
 		}
@@ -47,7 +47,7 @@ func (r *VideoPostgres) GetVideoByID(ctx context.Context, id int) (models.Video,
 func (r *VideoPostgres) GetVideoByTitle(ctx context.Context, title string) (models.Video, error) {
 	var video models.Video
 	row := r.db.QueryRow(ctx, getVideoByTitile, title)
-	if err := row.Scan(&video); err != nil {
+	if err := row.Scan(&video.Id, &video.Title, &video.Description, &video.Likes, &video.Dislikes, &video.Views); err != nil {
 		if err == sql.ErrNoRows {
 			return models.Video{}, nil
 		}
