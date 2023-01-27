@@ -1,6 +1,8 @@
 package service
 
 import (
+	"context"
+
 	"github.com/ResulShamuhammedov/fiber-server/pkg/models"
 	"github.com/ResulShamuhammedov/fiber-server/pkg/repository"
 )
@@ -10,9 +12,9 @@ type Service struct {
 }
 
 type Video interface {
-	AddVideo(video models.Video) (int, error)
-	GetVideoByID(id int) (models.Video, error)
-	GetVideoByTitle(title string) (models.Video, error)
+	AddVideo(ctx context.Context, video models.Video) (int, error)
+	GetVideoByID(ctx context.Context, id int) (models.Video, error)
+	GetVideoByTitle(ctx context.Context, title string) (models.Video, error)
 }
 
 func NewService(repo *repository.Repository) *Service {

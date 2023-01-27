@@ -1,10 +1,11 @@
 package repository
 
 import (
+	"context"
 	"database/sql"
 
 	"github.com/ResulShamuhammedov/fiber-server/pkg/models"
-	"github.com/jmoiron/sqlx"
+	"github.com/jackc/pgx/v4/pgxpool"
 )
 
 const (
@@ -14,25 +15,26 @@ const (
 )
 
 type VideoPostgres struct {
-	db *sqlx.DB
+	db *pgxpool.Pool
 }
 
-func NewVideoPostgres(db *sqlx.DB) *VideoPostgres {
+func NewVideoPostgres(db *pgxpool.Pool) *VideoPostgres {
 	return &VideoPostgres{db: db}
 }
 
-func (r *VideoPostgres) AddVideo(video models.Video) (int, error) {
+func (r *VideoPostgres) AddVideo(ctx context.Context, video models.Video) (int, error) {
 	var id int
-	row := r.db.QueryRow(insertVideo, video.Title, video.Description)
+	row := r.db.QueryRow(ctx, insertVideo, video.Title, video.Description)
 	if err := row.Scan(&id); err != nil {
 		return 0, err
 	}
 	return id, nil
 }
 
-func (r *VideoPostgres) GetVideoByID(id int) (models.Video, error) {
+func (r *VideoPostgres) GetVideoByID(ctx context.Context, id int) (models.Video, error) {
 	var video models.Video
-	if err := r.db.Get(&video, getVideoByID, id); err != nil {
+	row := r.db.QueryRow(ctx, getVideoByID, id)
+	if err := row.Scan(&video); err != nil {
 		if err == sql.ErrNoRows {
 			return models.Video{}, nil
 		}
@@ -42,9 +44,10 @@ func (r *VideoPostgres) GetVideoByID(id int) (models.Video, error) {
 	return video, nil
 }
 
-func (r *VideoPostgres) GetVideoByTitle(title string) (models.Video, error) {
+func (r *VideoPostgres) GetVideoByTitle(ctx context.Context, title string) (models.Video, error) {
 	var video models.Video
-	if err := r.db.Get(&video, getVideoByTitile, title); err != nil {
+	row := r.db.QueryRow(ctx, getVideoByTitile, title)
+	if err := row.Scan(&video); err != nil {
 		if err == sql.ErrNoRows {
 			return models.Video{}, nil
 		}

@@ -16,7 +16,7 @@ func (h *Handler) addVideo(c *fiber.Ctx) error {
 	}
 	input.Description = c.FormValue("description")
 
-	id, err := h.services.Video.AddVideo(input)
+	id, err := h.services.Video.AddVideo(c.UserContext(), input)
 	if err != nil {
 		eMsg := fmt.Sprintf("Internal server error: %s", err.Error())
 		return newErrorResponse(c, 500, eMsg)
@@ -34,7 +34,7 @@ func (h *Handler) getVideoByID(c *fiber.Ctx) error {
 		return newErrorResponse(c, 400, eMsg)
 	}
 
-	video, err := h.services.Video.GetVideoByID(id)
+	video, err := h.services.Video.GetVideoByID(c.UserContext(), id)
 	if err != nil {
 		eMsg := fmt.Sprintf("Internal server error: %s", err.Error())
 		return newErrorResponse(c, 500, eMsg)
@@ -53,7 +53,7 @@ func (h *Handler) getVideoByTitle(c *fiber.Ctx) error {
 		return newErrorResponse(c, 400, eMsg)
 	}
 
-	video, err := h.services.Video.GetVideoByTitle(title)
+	video, err := h.services.Video.GetVideoByTitle(c.UserContext(), title)
 	if err != nil {
 		eMsg := fmt.Sprintf("Internal server error: %s", err.Error())
 		return newErrorResponse(c, 500, eMsg)

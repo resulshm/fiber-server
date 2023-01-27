@@ -1,8 +1,10 @@
 package repository
 
 import (
+	"context"
+
 	"github.com/ResulShamuhammedov/fiber-server/pkg/models"
-	"github.com/jmoiron/sqlx"
+	"github.com/jackc/pgx/v4/pgxpool"
 )
 
 type Repository struct {
@@ -10,12 +12,12 @@ type Repository struct {
 }
 
 type Video interface {
-	AddVideo(video models.Video) (int, error)
-	GetVideoByID(id int) (models.Video, error)
-	GetVideoByTitle(title string) (models.Video, error)
+	AddVideo(ctx context.Context, video models.Video) (int, error)
+	GetVideoByID(ctx context.Context, id int) (models.Video, error)
+	GetVideoByTitle(ctx context.Context, title string) (models.Video, error)
 }
 
-func NewRepository(db *sqlx.DB) *Repository {
+func NewRepository(db *pgxpool.Pool) *Repository {
 	return &Repository{
 		Video: NewVideoPostgres(db),
 	}

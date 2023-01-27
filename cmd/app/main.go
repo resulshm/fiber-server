@@ -15,7 +15,7 @@ func main() {
 		logrus.Fatalf("Couldn't load env variables: %s", err.Error())
 	}
 
-	db, err := repository.NewPostgresDB(repository.Config{
+	dbpool, err := repository.NewPostgresDB(repository.Config{
 		Host:     os.Getenv("DB_HOST"),
 		Port:     os.Getenv("DB_PORT"),
 		Username: os.Getenv("DB_USERNAME"),
@@ -27,7 +27,9 @@ func main() {
 		logrus.Fatalf("failed to initialize db: %s", err.Error())
 	}
 
-	repos := repository.NewRepository(db)
+	defer dbpool.Close()
+
+	repos := repository.NewRepository(dbpool)
 	services := service.NewService(repos)
 	handler := handlers.NewHandler(services)
 

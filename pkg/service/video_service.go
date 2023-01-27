@@ -1,6 +1,8 @@
 package service
 
 import (
+	"context"
+
 	"github.com/ResulShamuhammedov/fiber-server/pkg/models"
 	"github.com/ResulShamuhammedov/fiber-server/pkg/repository"
 )
@@ -13,14 +15,14 @@ func NewVideoService(repo repository.Video) *VideoService {
 	return &VideoService{repo: repo}
 }
 
-func (s *VideoService) AddVideo(video models.Video) (int, error) {
-	return s.repo.AddVideo(video)
+func (s *VideoService) AddVideo(ctx context.Context, video models.Video) (int, error) {
+	return s.repo.AddVideo(ctx, video)
 }
 
-func (s *VideoService) GetVideoByID(id int) (models.Video, error) {
-	return s.repo.GetVideoByID(id)
+func (s *VideoService) GetVideoByID(ctx context.Context, id int) (models.Video, error) {
+	return s.repo.GetVideoByID(ctx, id)
 }
 
-func (s *VideoService) GetVideoByTitle(title string) (models.Video, error) {
-	return s.repo.GetVideoByTitle(title)
+func (s *VideoService) GetVideoByTitle(ctx context.Context, title string) (models.Video, error) {
+	return s.repo.GetVideoByTitle(ctx, title)
 }
