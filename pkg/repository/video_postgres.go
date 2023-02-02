@@ -2,9 +2,9 @@ package repository
 
 import (
 	"context"
-	"database/sql"
 
 	"github.com/ResulShamuhammedov/fiber-server/pkg/models"
+	"github.com/jackc/pgx/v4"
 	"github.com/jackc/pgx/v4/pgxpool"
 )
 
@@ -35,7 +35,7 @@ func (r *VideoPostgres) GetVideoByID(ctx context.Context, id int) (models.Video,
 	var video models.Video
 	row := r.db.QueryRow(ctx, getVideoByID, id)
 	if err := row.Scan(&video.Id, &video.Title, &video.Description, &video.Likes, &video.Dislikes, &video.Views); err != nil {
-		if err == sql.ErrNoRows {
+		if err == pgx.ErrNoRows {
 			return models.Video{}, nil
 		}
 		return video, err
@@ -48,7 +48,7 @@ func (r *VideoPostgres) GetVideoByTitle(ctx context.Context, title string) (mode
 	var video models.Video
 	row := r.db.QueryRow(ctx, getVideoByTitile, title)
 	if err := row.Scan(&video.Id, &video.Title, &video.Description, &video.Likes, &video.Dislikes, &video.Views); err != nil {
-		if err == sql.ErrNoRows {
+		if err == pgx.ErrNoRows {
 			return models.Video{}, nil
 		}
 		return video, err
